@@ -1,18 +1,35 @@
 import React from "react";
 import "./App.css";
 import { useSelector, useDispatch } from "react-redux";
-import { increment, decrement, reset } from "./action";
+import Box from "./components/Box";
 
 function App() {
-  let counter = useSelector((state) => state.counter);
+  let countNum = useSelector((state) => state.countNum);
   let dispatch = useDispatch();
+  let boxList = useSelector((state) => state.boxList);
 
+  let incrementNumber = () => {
+    dispatch({ type: "INCREMENT" });
+  };
+  let decrementNumber = () => {
+    dispatch({ type: "DECREMENT" });
+  };
+  let renderBox = () => {
+    return boxList && boxList.map((item, index) => <Box id={index} />);
+  };
+  let backgroundChange = (color) => {
+    dispatch({ type: "BACKGROUNDCOLOR", payload: color });
+  };
   return (
     <div className="App">
-      <h1>{counter}</h1>
-      <button onClick={() => dispatch(increment())}>Increment</button>
-      <button onClick={() => dispatch(decrement())}>Decrement</button>
-      <button onClick={() => dispatch(reset())}>Reset</button>
+      <h2>{countNum}</h2>
+      <button onClick={() => incrementNumber()}>Increment</button>
+      <button onClick={() => decrementNumber()}>Decrement</button>
+      <button>Reset</button>
+      <input onChange={(e) => backgroundChange(e.target.value)} />
+      <div>{renderBox()}</div>
+
+      <Box />
     </div>
   );
 }

@@ -4,13 +4,32 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { createStore } from "redux";
-import allReducer from "./reducers";
 import { Provider } from "react-redux";
 
-const store = createStore(
-  allReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+let initialState = {
+  countNum: 0,
+  boxList: [],
+  backgroundColor: "",
+};
+
+function countReducer(state = initialState, action) {
+  if (action.type === "INCREMENT") {
+    state.countNum++;
+    state.boxList.push("");
+  }
+  if (action.type === "DECREMENT" && state.countNum > 0) {
+    state.countNum--;
+    state.boxList.pop("");
+  }
+  if (action.type === "BACKGROUNDCOLOR") {
+    state.backgroundColor = action.payload;
+  } else if (action.type === "SINGLECOLOR") {
+    state.boxList[action.payload.id] = action.payload.color;
+  }
+  return state;
+}
+
+const store = createStore(countReducer);
 
 ReactDOM.render(
   <Provider store={store}>
